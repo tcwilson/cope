@@ -2,10 +2,7 @@
 package App::Cope;
 use strict;
 use warnings;
-use 5.010_000;
 use Carp;
-
-no warnings 'experimental';
 
 our $VERSION = '0.99';
 
@@ -34,11 +31,11 @@ our @EXPORT = qw[run mark line real_path];
 our @EXPORT_OK = qw[run_with get colourise];
 
 sub import {
-  # Automatically use strictures and warnings and Perl 5.10 features,
+  # Automatically use strictures and warnings and Perl 5.22 features,
   # so those three lines don't have to be typed for every script
   strict->import;
   warnings->import;
-  feature->import( ':5.10' );
+  feature->import( ':5.22' );
 
   # Let Exporter do the rest
   App::Cope->export_to_level( 1, @_ );
@@ -111,7 +108,7 @@ sub run {
   }
   else {
     my $ret_val = run_with( $process, @args );
-	exit $ret_val;
+    exit $ret_val;
   }
 }
 
@@ -228,8 +225,8 @@ sub line {
       # match, e.g. /(?: (\S+) )?/x where the match fails.
       if ( defined $start and defined $end ) {
         my $before = substr $_, $start, $end - $start;
-	my $c = get( $colour, $before );
-	colour( $start, $end => $c );
+        my $c = get( $colour, $before );
+        colour( $start, $end => $c );
       }
     }
 

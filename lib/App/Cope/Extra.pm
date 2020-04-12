@@ -2,9 +2,6 @@
 package App::Cope::Extra;
 use strict;
 use warnings;
-use 5.010_000;
-
-no warnings 'experimental';
 
 =head1 NAME
 
@@ -21,7 +18,7 @@ App::Cope::Extra - Pre-defined highlighting syntax for common patterns
 
 App::Cope::Extra contains several common patterns to save you from
 incessantly defining them. Functions that take a colour parameter
-return functions, so you can use them using the consistant C<\&>
+return functions, so you can use them using the consistent C<\&>
 syntax.
 
 No functions are exported by default.
@@ -137,12 +134,12 @@ sub percent_b {
   return sub {
     my $pct = shift;
     $pct =~ s/^(\d+).+/$1/;	# extract number
-    given ($pct) {
-      when ( $_ >= $upper  ) { return 'red bold' }
-      when ( $_ >= $middle ) { return 'yellow bold' }
-      when ( $_ >= $lower  ) { return 'green bold' }
-      default                { return 'bold' }
-    }
+
+    if ($pct >= $upper) { return 'red bold' }
+    if ($pct >= $middle) { return 'yellow bold' }
+    if ($pct >= $lower) { return 'green bold' }
+
+    return 'bold';
   };
 }
 
@@ -156,12 +153,10 @@ depending on how long the ping took.
 sub ping_time {
   my ($ms) = @_;
   if ($ms =~ m/(\d+)/) {
-    given ($1) {
-      when ( $_ >= 200 ) { return 'red bold' }
-      when ( $_ >= 100 ) { return 'yellow bold' }
-      default            { return 'green bold' }
-    }
+    if ($1 >= 200) { return 'red bold' }
+    if ($1 >= 100) { return 'yellow bold' }
+
+    return 'green bold';
   }
   return '';
 }
-

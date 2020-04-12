@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+use App::Cope;
+
+sub process {
+  line qr{^(Screen \d+)} => 'cyan bold';
+
+  line qr{^(\S+) ((?:dis)?connected)(\s+primary)? (?:(\d+x\d+)(\+\d+\+\d+))?} =>
+    'yellow',
+    { connected => 'green bold', disconnected => 'red bold' },
+    'cyan bold',
+    'yellow bold',
+    'yellow';
+
+    # line qr{^\s*(\d+x\d+)\s+(\S+?)\*} => 'underline', '';
+  if (/\d{2,3}\.\d{2}\*/) {
+    line qr{^\s*(\d+x\d+).+\*} => 'underline';
+    line qr{(\d{2,3}\.\d{2})\*} => 'white on_red';
+  }
+}
+
+run( \&process, real_path, @ARGV );

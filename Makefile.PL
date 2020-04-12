@@ -1,29 +1,41 @@
-use inc::Module::Install;
+use ExtUtils::MakeMaker;
+use File::ShareDir::Install;
 
-# metadata
-name 'Cope';
-all_from 'lib/App/Cope.pm';
+install_share 'share';
 
-# use 5.10 for given/when construct
-perl_version '5.010';
+WriteMakefile(
+  NAME              => 'App::Cope',
+  DISTNAME          => 'App-Cope',
+  ABSTRACT          => 'A colorful wrapper for terminal programs',
+  VERSION_FROM      => 'lib/App/Cope.pm',
+  LICENSE           => 'perl',
+  MIN_PERL_VERSION  => '5.022000',
 
-# requirements
-requires 'Env::Path';
-requires 'File::ShareDir';
-requires 'IO::Handle';
-requires 'IO::Pty';
-requires 'IO::Stty';
-requires 'List::MoreUtils';
-requires 'Regexp::Common';
-requires 'Term::ANSIColor';
-requires 'Regexp::IPv6';
+  EXE_FILES => [ qw(scripts/cope_path.pl) ],
 
-# testing
-test_requires 'Test::More';
+  CONFIGURE_REQUIRES => {
+    'ExtUtils::MakeMaker'     => 0,
+    'File::ShareDir::Install' => 0,
+  },
 
-# install the scripts
-install_share 'scripts';
+  PREREQ_PM => {
+    'Env::Path'       => 0,
+    'File::ShareDir'  => 0,
+    'IO::Pty'         => 0,
+    'IO::Stty'        => 0,
+    'List::MoreUtils' => 0,
+    'Regexp::Common'  => 0,
+    'Regexp::IPv6'    => 0,
 
-# go go go!
-auto_install;
-WriteAll;
+    # Core modules that need to be available
+    'IO::Handle'      => 0,
+    'Term::ANSIColor' => 0,
+  },
+
+  TEST_REQUIRES => {
+    'Test::More'      => 0,
+  },
+);
+
+package MY;
+use File::ShareDir::Install qw(postamble);
